@@ -10,6 +10,9 @@ app.get('/', (request,response) => {
  return response.status(200).send("Welcome to MERN STACK");
 });
 
+//Middleware for parsing request body
+app.use(express.json());
+
 
 
 mongoose.connect(mongoDBURL).then(() => {
@@ -19,5 +22,27 @@ mongoose.connect(mongoDBURL).then(() => {
     });
 }).catch((error) => {
     console.log(error);
+})
+
+app.post('/books', async (request,response) => {
+    try {
+        if(!request.body.title ||
+            !request.body.author ||
+            !request.body.publishYear){
+                return response.status(400).send({
+                    message:'send all required field'
+                });
+            }
+            const newBook = {
+                title : request.body.title,
+                author: request.body.author,
+                publishYear : request.body.publishYear,
+            };
+            const book = await Book.create(new book);
+            return response.status(201).send(book);
+    }catch (error){
+        console.log(error.message);
+        response.status(500).send({message : error.message});
+    }
 })
 
