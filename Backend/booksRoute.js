@@ -9,10 +9,7 @@ const router = express.Router();
 router.get("/", async (request, response) => {
   try {
     const books = await Book.find({});
-    return response.status(500).json({
-      count: books.length,
-      data: books,
-    });
+    return response.status(200).json(books);
   } catch (error) {
     console.log(error.message);
     response.status(500).send({ message: error.message });
@@ -30,7 +27,7 @@ router.get("/:id", async (request, response) => {
       });
     }
 
-    return response.status(500).json(book);
+    return response.status(200).json(book);
   } catch (error) {
     console.log(error.message);
     response.status(500).send({ message: error.message });
